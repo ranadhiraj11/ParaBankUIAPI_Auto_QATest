@@ -1,0 +1,3 @@
+Clicking...
+New Account ID: 30660
+Account ID saved for future tests: 30660
