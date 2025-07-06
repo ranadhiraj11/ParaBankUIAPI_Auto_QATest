@@ -23,7 +23,7 @@ export class HomePage {
     }
 
     async goToParaBank() {
-        await this.page.goto('https://parabank.parasoft.com/');
+        await this.page.goto('/');
     }
 
     async navigateTo(linkLocator: Locator) {
