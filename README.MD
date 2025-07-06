@@ -10,8 +10,6 @@ This repository contains a Playwright test automation framework for both end-to-
 ├── pages/ # Page Object Models for UI
 ├── helper/ # Test data generators 
 ├── .github/workflows/ # GitHub Actions CI workflow
-├── allure-results/ # Raw results for Allure
-├── allure-report/ # Generated HTML report from Allure
 └── playwright.config.ts # Playwright configuration
 ```
 
