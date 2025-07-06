@@ -5,7 +5,6 @@ import { RegisterPage } from './pages/registerPage';
 
 async function globalSetup(config: FullConfig) {
   const browser = await chromium.launch();
-  const context = await browser.newContext();
   const page = await browser.newPage();
 
   // Register a new user and log in
