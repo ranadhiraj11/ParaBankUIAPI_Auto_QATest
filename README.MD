@@ -1,6 +1,6 @@
 # 🎭 Playwright Automation Framework
 
-This repository contains a modular Playwright test automation framework for both end-to-end (UI) and API testing of the [ParaBank demo application](https://parabank.parasoft.com/).
+This repository contains a Playwright test automation framework for both end-to-end (UI) and API testing of the [ParaBank demo application](https://parabank.parasoft.com/).
 
 ---
 
@@ -22,15 +22,14 @@ This repository contains a modular Playwright test automation framework for both
 
 ### 1. Install dependencies
 
-```bash
 npm install
 npx playwright install --with-deps
 npm install -D allure-commandline
 
-2. Run tests
+### 2. Run Tests
 npx playwright test
 
-3. Generate Allure Report
+### 3. Generate Allure Report
 npx allure generate allure-results --clean -o allure-report
 npx allure open allure-report
 
