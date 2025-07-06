@@ -1,5 +1,7 @@
 import {Page, Locator, expect} from '@playwright/test';
-import { generateUser } from '../helper/user-payee-generator';
+import { generateUser, User } from '../helper/userPayeeGenerator';
+
+const keyPressDelay = 100;
 
 export class RegisterPage {
     readonly page: Page;
@@ -9,7 +11,7 @@ export class RegisterPage {
         readonly addressTextBox: Locator;
         readonly cityTextBox: Locator;
         readonly stateTextBox: Locator;
-        readonly zipCodTextBoxe: Locator;
+        readonly zipCodTextBox: Locator;
         readonly phoneTextBox: Locator;
         readonly ssnTextBox: Locator;
         readonly usernameTextBox: Locator;
@@ -18,6 +20,11 @@ export class RegisterPage {
         readonly registerButton: Locator;
         readonly successTitle: Locator;
         readonly successMsg: Locator;
+        readonly userLoginTextBox: Locator;
+        readonly userPasswordTextBox: Locator;
+        readonly loginButton: Locator;
+        readonly logoutLink: Locator;
+        readonly successHeader: Locator;
     };
 
     constructor(page: Page) {
@@ -28,7 +35,7 @@ export class RegisterPage {
             addressTextBox: page.locator('input[name="customer.address.street"]'),
             cityTextBox: page.locator('input[name="customer.address.city"]'),
             stateTextBox: page.locator('input[name="customer.address.state"]'),
-            zipCodTextBoxe: page.locator('input[name="customer.address.zipCode"]'),
+            zipCodTextBox: page.locator('input[name="customer.address.zipCode"]'),
             phoneTextBox: page.locator('input[name="customer.phoneNumber"]'),
             ssnTextBox: page.locator('input[name="customer.ssn"]'),
             usernameTextBox: page.locator('input[name="customer.username"]'),
@@ -36,24 +43,31 @@ export class RegisterPage {
             confirmTextBox: page.locator('input[name="repeatedPassword"]'), 
             registerButton: page.getByRole('button', {name: 'REGISTER'}),
             successTitle: page.locator('.title'),
-            successMsg: page.getByText('Your account was created successfully. You are now logged in')
+            successMsg: page.getByText('Your account was created successfully. You are now logged in'),
+            userLoginTextBox: page.locator('input[name="username"]'),
+            userPasswordTextBox: page.locator('input[name="password"]'),
+            loginButton: page.locator('input[value="Log In"]'),
+            logoutLink: page.locator('text=Log Out'),
+            successHeader: page.getByRole('heading', { name: 'Accounts Overview' })
         }
     }
 
-    async registerUser(){
-        const user = generateUser();
-        await this.locators.firstNameTextBox.fill(user.firstName);
-        await this.locators.lastNameTextBox.fill(user.lastname);
-        await this.locators.addressTextBox.fill(user.address);
-        await this.locators.cityTextBox.fill(user.city);
-        await this.locators.stateTextBox.fill(user.state);
-        await this.locators.zipCodTextBoxe.fill(user.zipCode);
-        await this.locators.phoneTextBox.fill(user.phone);
-        await this.locators.ssnTextBox.fill(user.ssn);
-        await this.locators.usernameTextBox.fill(user.username);
-        await this.locators.passwordTextBox.fill(user.password);
-        await this.locators.confirmTextBox.fill(user.password);
-        await this.locators.registerButton.click();
+    async registerUser(user: User){
+    await this.locators.firstNameTextBox.pressSequentially(user.firstName, { delay: keyPressDelay });
+    await this.locators.lastNameTextBox.pressSequentially(user.lastname, { delay: keyPressDelay });
+    await this.locators.addressTextBox.pressSequentially(user.address, { delay: keyPressDelay });
+    await this.locators.cityTextBox.pressSequentially(user.city, { delay: keyPressDelay });
+    await this.locators.stateTextBox.pressSequentially(user.state, { delay: keyPressDelay });
+    await this.locators.zipCodTextBox.pressSequentially(user.zipCode, { delay: keyPressDelay });
+    await this.locators.phoneTextBox.pressSequentially(user.phone, { delay: keyPressDelay });
+    await this.locators.ssnTextBox.pressSequentially(user.ssn, { delay: keyPressDelay });
+    await this.locators.usernameTextBox.pressSequentially(user.username, { delay: keyPressDelay });
+    await this.locators.passwordTextBox.pressSequentially(user.password, { delay: keyPressDelay });
+    await this.locators.confirmTextBox.pressSequentially(user.password, { delay: keyPressDelay });
+    // try to prevent captcha
+    await this.page.mouse.wheel(0, Math.random() * 500 + 200);
+    await this.page.waitForTimeout(Math.random() * 2000 + 500);
+    await this.locators.registerButton.click();
 
         const usernameError = this.page.locator('text=This username already exists.');
 
@@ -66,16 +80,15 @@ export class RegisterPage {
         await expect(this.locators.successMsg).toBeVisible();
 
         //  Log out
-        await this.page.click('text=Log Out');
+        await this.locators.logoutLink.click()
 
         //  Log in with the same credentials
-        await this.page.fill('input[name="username"]', user.username);
-        await this.page.fill('input[name="password"]', user.password);
-        await this.page.click('input[value="Log In"]');
+        await this.locators.userLoginTextBox.fill(user.username)
+        await this.locators.userPasswordTextBox.fill(user.password)
+        await this.locators.loginButton.click()
 
         //  Verify login success
-        await expect(this.page.getByRole('heading', { name: 'Accounts Overview' })).toBeVisible();
-
+        await expect(this.locators.successHeader).toBeVisible();
     }
 
     

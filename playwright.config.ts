@@ -26,14 +26,11 @@ export default defineConfig({
     ['html'],
     ['allure-playwright']
   ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  globalSetup: './globalSetup.ts',
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://parabank.parasoft.com/',
-    storageState: './storageState.json', // Reuse the saved login session
     screenshot: 'only-on-failure',
-    video: 'off',
+    video: 'on',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -46,7 +43,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-  /*   {
+   /*  {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
@@ -54,7 +51,7 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    }, */
+    },*/ 
 
     /* Test against mobile viewports. */
     // {

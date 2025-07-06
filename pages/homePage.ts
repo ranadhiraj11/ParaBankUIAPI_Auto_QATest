@@ -36,7 +36,7 @@ export class HomePage {
         await expect(this.page).toHaveURL(expectedUrlPart);
     }
 
-    // inside homePage.ts
+    
     getNavLinksToVerify() {
     return [
         { locator: this.locators.navHomeLink, urlPattern: /index\.htm$/ },

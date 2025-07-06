@@ -1,5 +1,5 @@
 import {Page, Locator, expect} from '@playwright/test';
-import { generatePayee } from '../helper/user-payee-generator';
+import { generatePayee, Payee } from '../helper/userPayeeGenerator';
 
 export class BillPayPage {
     readonly page: Page;
@@ -41,8 +41,7 @@ export class BillPayPage {
         this.locators.navBillPayLink.click();
     }
 
-    async payBill(fromAccountId: string) {
-        const payee = generatePayee();
+    async payBill(fromAccountId: string, payee: Payee) {
         await this.locators.nameTextBox.fill(payee.payeeName);
         await this.locators.addressTextBox.fill(payee.address);
         await this.locators.cityTextBox.fill(payee.city);
@@ -58,7 +57,5 @@ export class BillPayPage {
         await expect(this.locators.billPaySuccesMsg).toContainText('Bill Payment Complete')
         await expect(this.locators.billPaySuccesMsg).toContainText(`Bill Payment to ${payee.payeeName} in the amount of $${payee.amount}.00 from account ${fromAccountId} was successful.`)
         await expect(this.locators.billPaySuccesMsg).toContainText('See Account Activity for more details.')
-        return payee;
-
     }
 }
